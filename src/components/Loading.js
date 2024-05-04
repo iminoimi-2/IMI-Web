@@ -1,10 +1,26 @@
 import React from 'react';
+import imgBackLoading from '../assets/images/back-loading.jpg';
+import imgLogoTitle from '../assets/images/logo-title.png';
+import imgSide0 from '../assets/images/sidebar/icon-0.jpg';
+import imgSide1 from '../assets/images/sidebar/icon-1.jpg';
+import imgSide2 from '../assets/images/sidebar/icon-2.jpg';
+import imgSide3 from '../assets/images/sidebar/icon-3.jpg';
+import videoTitle from '../assets/video/title.mp4';
+import imgSubTitle from '../assets/images/sub-title-logo.png';
+import { testSoul } from './Main';
+
+const sideButtonArr = [
+	{key:'btn0', label:'Button 1', icon:imgSide0},
+	{key:'btn1', label:'Button 2', icon:imgSide1},
+	{key:'btn2', label:'Button 3', icon:imgSide2},
+	{key:'btn3', label:'Button 4', icon:imgSide3},
+]
 
 export default class LoadingComponent extends React.Component {
 	constructor(props) {
 		super(props);
 		const {loading, loadPro} = props;
-		this.state = {loading, loadPro};
+		this.state = {loading, loadPro, gameMode:false, hideSide0:true, hideSide1:true, hideSide2:true, hideSide3:true};
 	}
 
 	componentDidMount() {
@@ -13,24 +29,50 @@ export default class LoadingComponent extends React.Component {
 	componentWillReceiveProps(nextProps) {
 		['loading', 'loadPro'].forEach(key => { 
 			if (this.state[key] !== nextProps[key]) {
+				if (this.state.loading && !nextProps.loading) {
+					this.props.showSideRight(true);
+					const videoTitle = document.getElementById('videoTitle');
+					if (videoTitle) videoTitle.play();
+				}
 				this.setState({[key]:nextProps[key]}, () => {
 				});
 			}
 		});
 	}
 
+	setGameMode = () => {
+		this.setState({hideMainTitle:true, hideSideBar:true});
+		const mp3BackSound = document.getElementById('mp3BackSound');
+		if (mp3BackSound) mp3BackSound.play();
+	
+		setTimeout(() => { this.setState({gameMode:true}); }, 1200);
+		this.props.showSideRight(false);
+		setTimeout(() => { this.props.setGameMode(true); }, 1000);
+	}
+
 	render() {
-		const {loading, loadPro} = this.state;
+		const {loading, loadPro, hideMainTitle, hideSideBar, gameMode} = this.state;
 		return (
-			<div className={`back-board loading ${loading?'show':''} flex`}>
-				<div className='main-title'>IMINOIMI</div>
-				<div className='loading-wrapper'>
-					<div className='loading-box'></div>
-					<div className='loading-bar' style={{width:loadPro+'%'}}></div>
-				</div>
-				<div className='footer flex'>
-					<div className='label'>ISLAND TRAVEL</div>
-					<div className='label'>TECH DEMO</div>
+			<div className={`back-board loading-page ${gameMode?'':'show'} ${loading?'loading':'available'} flex`}>
+				<div className={`img-back-loading ${loading?'':'trans'}`} style={{ backgroundImage: `url(${imgBackLoading})` }}></div>
+				<div className={`loading-trans-board ${loading?'':'ready'} ${hideSideBar?'trans':''}`}></div>
+				{loading &&
+					<div className='loading-bar-outer'>
+						<div className='loading-bar-wrapper'>
+							<div className='loading-box'></div>
+							<div className='loading-bar' style={{width:loadPro+'%'}}></div>
+						</div>
+					</div>
+				}
+				<div className={`main-title ${hideMainTitle?'hide':''}`} onClick={e=>this.setGameMode()}>
+					{/* <img src={imgLogoTitle}></img> */}
+					<div className='title-wrapper'>
+						{!testSoul && <video muted autoPlay={false} id='videoTitle'>
+							<source src={videoTitle} type="video/mp4"></source>
+						</video>}
+						<div className='title-mark'></div>
+						<img className='sub-title' src={imgSubTitle}></img>
+					</div>
 				</div>
 			</div>
 		);

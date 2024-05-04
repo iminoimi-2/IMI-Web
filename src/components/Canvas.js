@@ -5,31 +5,37 @@ import axios from 'axios';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import {PointerLockControls} from 'three/examples/jsm/controls/PointerLockControls';
 import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader';
-import fbxIsland0 from '../assets/model/group-scene.fbx'; // test0
+// import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader';
+// import {DRACOLoader} from 'three/examples/jsm/loaders/DRACOLoader'
+// import fbxIsland0 from '../assets/model/group-scene.fbx'; // test0
+// import fbxMan from '../assets/model/man/man-0.fbx';
+// import glbIsland from '../assets/model/scene-group-normal.glb'; // compress
 
-// import imgFloor from '../assets/images/floor.jpg';
-import { CustomModel, GetPanoMesh, SetTween, transTime } from '../data/info';
+import { GetClickObj, GetMousePos, GetNearGroundArr, SetTween, testMesh, transTime } from '../data/info';
 import { OnKeyDown, OnKeyUp } from '../data/keyboard';
+import { DrawSoulLines, FlyBirdWing, FlySoul, FlySoulNodes, PlayerMove, WalkNPC } from '../data/walk';
+import { LoadNPCModelArr, LoadIslandModel, LoadPlayer, AddNPCModel, GetPanoMesh, LoadSoulModel } from '../data/load';
+import { SetSoulScene, sceneSkyColHex, sceneSpaceColHex } from '../data/sceneTrans';
 
-export const camDis = 1, islandDis = camDis, islandSize = camDis * 1000;
-const islandArr = [{x:0, z:0, fbx:fbxIsland0}], moveInt = 5000, velInt = 10, altArea = 10, altChckTime = 3000, altCheckDis = 1000;
-
+export const camDis = 50, localTest = false, timeTransSoul = 3000, timeUpSoul = 1000;
+// const islandArr = [{x:0, z:0, fbx:fbxIsland0}], altArea = 10, altCheckTime = 1000;
 
 let prevTime = performance.now();
 export default class CanvasComponent extends React.Component {
 	constructor(props) {
 		super(props);
-		const {pageKey} = props;
-		this.state = {pageKey, selPlace:-1, lockScreen:false};
-		this.placeArr = []; this.groundArr = [];
-		this.controlKey = 'person';
+		const {pageKey, gameMode, soulMode} = props;
+		this.state = {pageKey, selPlace:-1, gameMode, soulMode};
+		this.groundArr = []; this.nearGroundArr = []; this.obstArr = []; this.nearObstArr = []; this.clickObjArr = []; this.nearClickObjArr = []; this.npcMeshArr = []; this.nearNpcArr = [];
+
+		this.playerMark = testMesh.clone();
+		this.playerMark.scale.set(0.1, 0.1, 0.1);
+		this.playerMark.material = new THREE.MeshStandardMaterial({color:0x0000FF, side:2, transparent:true, opacity:localTest?0.3:0});
+
 		this.velocity = new THREE.Vector3(0, 0, 0);
 		this.direction = new THREE.Vector3(0, 0, 0);
-		this.vertex = new THREE.Vector3(0, 0, 0);
-		this.moveForward = false;
-		this.moveBackward = false;
-		this.moveLeft = false;
-		this.moveRight = false;
+		this.moveForward = false; this.moveLeft = false;
+		this.moveBackward = false; this.moveRight = false;
 	}
 
 	componentDidMount() {
@@ -39,31 +45,49 @@ export default class CanvasComponent extends React.Component {
 		this.loadPanoBack();
 		document.addEventListener( 'keydown', e=> OnKeyDown(e, this) );
 		document.addEventListener( 'keyup', e=> OnKeyUp(e, this) );
-		setInterval(() => {
-			
-		}, altChckTime);
+		document.addEventListener( 'click', e=> this.onMouseClick(e) );
+		document.addEventListener( 'mousemove', e=> this.onMouseMove(e) );
 	}
 
 	componentWillReceiveProps(nextProps) {
-		['pageKey', 'colArr'].forEach(key => {
-			this.setState({[key]:nextProps[key]}, e=> {
-			})
+		['pageKey', 'gameMode', 'soulMode'].forEach(key => {
+			if (this.state[key] !== nextProps[key]) {
+				if (!this.state.gameMode && nextProps.gameMode) {
+					this.setGameMode();
+				}
+				this.setState({[key]:nextProps[key]}, e=> {
+					if (key==='soulMode') this.setSoulMode();
+				})
+			}
 		});
 	}
 
-	setControls = (newControl) => {
-		if (newControl===this.controlKey) return;
-		if (newControl==='orbit') {
-			this.controlsOrbit.enabled = true;
-			this.controlsPerson.enabled = false;
-			this.controlsPerson.unlock();
-		} else {
-			this.controlsOrbit.enabled = false;
-			this.controlsPerson.enabled = true;
-			this.controlsPerson.lock();
-			console.log(this.controlsPerson);
-		}
-		this.controlKey = newControl;
+	setSoulMode = () => {
+		this.props.setSceneTrans(true);
+		SetSoulScene(this.state.soulMode, this);
+		setTimeout(() => {
+			this.props.setSceneTrans(false);
+		}, timeTransSoul + timeUpSoul);
+	}
+
+	onMouseMove = (e) => {
+		if (!this.state.gameMode) return;
+		const {posX} = GetMousePos(e);
+		this.props.showSideRight(posX > window.innerWidth - 120);
+	}
+
+	onMouseClick = (e) => {
+		const interObj = GetClickObj(e, [...this.nearClickObjArr, ...this.nearNpcArr], this.camera);
+		if (!interObj) return;
+		const {clickKey, npcKey} = interObj.object;
+		this.props.openModal(clickKey || npcKey);
+	}
+
+	setGameMode = () => {
+		const {x, y, z} = this.playerPos;
+		SetTween(this.islandGroup, "rotation", {x:0, y:0, z:0}, transTime * 2);
+		SetTween(this.islandGroup, "position", {x:-x, y:-y, z:-z}, transTime * 2);
+		setTimeout(() => { this.totalGroup.add(this.player, this.playerMark); }, transTime * 2 + 100);
 	}
 
 	gotoPlace = (idx) => {
@@ -78,111 +102,68 @@ export default class CanvasComponent extends React.Component {
 		SetTween(this.camera, "position", newCamPos, transTime, 'camera');
 		SetTween(this.controlsOrbit, "target", newPos, transTime, 'controlsOrbit');
 
-		setTimeout(() => {
-			this.setState({selPlace:idx})
-		}, transTime);
+		setTimeout(() => { this.setState({selPlace:idx}) }, transTime);
 	}
 
 	loadPanoBack = () => {
-		// const planeMap = new THREE.TextureLoader().load(imgFloor);
-		// planeMap.wrapS = THREE.RepeatWrapping;
-		// planeMap.wrapT = THREE.RepeatWrapping;
-		// planeMap.repeat.set(25, 25);
-
-		// const planeGeo = new THREE.PlaneGeometry(100, 100);
-		// const planeMat = new THREE.MeshStandardMaterial({color:0x666666, map:planeMap});
-		// this.planeMesh = new THREE.Mesh(planeGeo, planeMat); this.planeMesh.receiveShadow = true;
-		// this.planeMesh.rotation.x = Math.PI / -2;
-		// this.totalGroup.add(this.planeMesh);
-
-		// this.panoSun = GetPanoMesh('pano_sun'); this.totalGroup.add(this.panoSun);
+		this.panoBack = GetPanoMesh('pano-back'); this.totalGroup.add(this.panoBack);
+		// this.panoSky = GetPanoMesh('pano-sky'); this.totalGroup.add(this.panoSky);
+		// this.panoSpace = GetPanoMesh('pano-space'); this.totalGroup.add(this.panoSpace);
+		// console.log(this.panoSky);
+		// console.log(this.panoSpace);
 	}
 
 	loadModel = () => {
-		islandArr.forEach((item, idx) => {
-			const loader = new FBXLoader();
-			loader.load(item.fbx, (fbx) => {
-				this.props.setLoading(false);
-				const {islandModel, placeArr, groundArr} = CustomModel(fbx, idx);
-				this.islandGroup.add(islandModel);
-				this.placeArr = [...placeArr];
-				this.groundArr = [...groundArr];
-				const posFirst = placeArr[0];
-
-				this.camera.position.set(posFirst.x + camDis, 0, posFirst.z);
-				this.camera.lookAt(new THREE.Vector3(posFirst.x, 0, posFirst.z));
-				this.camera.updateProjectionMatrix();
-
-				// this.controlsOrbit.target = new THREE.Vector3(posFirst.x, posFirst.y, posFirst.z);
-				// this.controlsOrbit.update();
-
-				this.controlsPerson.target = new THREE.Vector3(posFirst.x, 0, posFirst.z);
-				this.islandGroup.position.y = -posFirst.y;
-
-				this.setState({lockScreen:true, selPlace:0});
-			}, (xhr) => { 
-				const {total, loaded} = xhr;
-				this.props.setLoadPro(Math.round(loaded/total*100));
-			}, (error) => { })
-		});
+		LoadIslandModel(this);
+		LoadPlayer(this);
+		LoadNPCModelArr(this);
+		LoadSoulModel(this);
 	}
 
 	initScene = () => {
 		const {wSize} = this.props;
-		this.renderer = new THREE.WebGLRenderer({antialias:true}); // , preserveDrawingBuffer: true
+		this.renderer = new THREE.WebGLRenderer({antialias:true, alpha:true}); // , preserveDrawingBuffer: true
 		this.renderer.setSize(wSize.width, wSize.height);
 		if (!document.getElementById("container")) return false;
 		document.getElementById("container").appendChild(this.renderer.domElement);
 
-		this.renderer.setClearColor(0x30ACEA, 1);
+		this.renderer.setClearColor(sceneSpaceColHex, 1); // sceneSkyColHex
 		// this.renderer.shadowMap.enabled = true;
 		// this.renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 
 		this.scene = new THREE.Scene();
 		// this.scene.fog = new THREE.Fog(0xFFFFFF, 14, 30);
-		this.camera = new THREE.PerspectiveCamera(60, wSize.width / wSize.height, 1, 100000);
-		// this.camera.position.set(camDis, 0, 0);
+		this.camera = new THREE.PerspectiveCamera(60, wSize.width / wSize.height, 0.1, 100000);
+		this.camera.position.set(camDis, 0, 0); // camDis * 10
 		
 		this.totalGroup = new THREE.Group(); this.scene.add(this.totalGroup);
 		this.islandGroup = new THREE.Group(); this.totalGroup.add(this.islandGroup);
+		this.soulGroup = new THREE.Group(); this.totalGroup.add(this.soulGroup);
+		const nodeGroup = new THREE.Group(), lineGroup = new THREE.Group(), randGroup = new THREE.Group();
+		this.soulGroup.add(nodeGroup, lineGroup, randGroup); this.soulGroup.visible = false;
+		this.birdGroup = new THREE.Group(); this.totalGroup.add(this.birdGroup);
 		
 		this.ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.3); this.scene.add(this.ambientLight);
 		this.mainLight = new THREE.PointLight(0xFFFFFF, 3.5, 10000 ); this.scene.add(this.mainLight); // DirectionalLight
 		// this.scene.fog = new THREE. Fog( 0xffffff, camDis * 0.8, camDis * 5);
 		this.mainLight.position.set(camDis, camDis, camDis);
-		// 1, 116, 10
 
 		// this.mainLight.castShadow = true;
 		// this.mainLight.shadow.mapSize.width = 512; // default
 		// this.mainLight.shadow.mapSize.height = 512; // default
 		// this.mainLight.shadow.camera.near = 0.5; // default
 		// this.mainLight.shadow.camera.far = 500;
-		// this.backLight = new THREE.DirectionalLight(0xFFFFFF, 1.0 ); this.scene.add( this.backLight );
-		// this.backLight.position.set(-camDis, camDis, -camDis);
-		// this.backLight = new THREE.DirectionalLight(0xFFFFFF, 0.2 ); this.backLight.position.set(5, -5, -5); this.scene.add( this.backLight );
-		// this.frontLight = new THREE.DirectionalLight(0xFFFFFF, 0.4 ); this.frontLight.position.set(-5, -1, 0); this.scene.add( this.frontLight );
+		this.topLight = new THREE.DirectionalLight(0xFFFFFF, 1.0 ); this.topLight.position.set(0, 100, 0); this.scene.add( this.topLight );
 
 		this.controlsOrbit = new OrbitControls(this.camera, this.renderer.domElement);
-		// this.controlsOrbit.enableDamping = true;
-		// this.controlsOrbit.enableZoom = false;
-		// this.controls.enablePan = false;
-		// this.controlsOrbit.minDistance = camDis * 0.5;
-		// this.controlsOrbit.maxDistance = camDis * 2;
+		this.controlsOrbit.enableDamping = true;
+		this.controlsOrbit.enableZoom = false;
+		this.controlsOrbit.enablePan = false;
 		this.controlsOrbit.minPolarAngle = 0.5;
-		this.controlsOrbit.maxPolarAngle = Math.PI / 2 + 0.5; // this.controls.minPolarAngle = 0.3;
-		
-		// this.controls.addEventListener('change', () => {if (renderMethod !== 'time') this.rendering()})
-		this.controlsOrbit.enabled = false;
-
-		this.controlsPerson = new PointerLockControls( this.camera, this.renderer.domElement );
-		this.controlsPerson.enabled = true;
-		this.controlsPerson.addEventListener( 'lock', () => { this.setState({lockScreen:false}); } );
-		this.controlsPerson.addEventListener( 'unlock', () => { this.setState({lockScreen:true}); } );
+		this.controlsOrbit.maxPolarAngle = Math.PI / 2 + 0.5;
 	}
 
-	startControl = () => {
-		this.controlsPerson.lock();
-	}
+	addNPCModel = () => { AddNPCModel(this); }
 
 	animate = () => {
 		// if (renderMethod!=='time') return;
@@ -190,40 +171,18 @@ export default class CanvasComponent extends React.Component {
 		this.rendering();
 		requestAnimationFrame(this.animate);
 
+		const time = performance.now();
 
-		if ( this.controlKey === 'person' ) {
+		const deltaTime = ( time - prevTime ) / 1000;
+		PlayerMove(this, deltaTime);
+		WalkNPC(this);
+		prevTime = time;
+		FlyBirdWing(this.birdGroup.children);
 
-			const time = performance.now();
-			// raycaster.ray.origin.copy( controls.getObject().position );
-			// raycaster.ray.origin.y -= 10;
-			// const intersections = raycaster.intersectObjects( objects, false );
-			// const onObject = intersections.length > 0;
-
-			const delta = ( time - prevTime ) / 1000;
-
-			this.velocity.x -= this.velocity.x * velInt * delta;
-			this.velocity.z -= this.velocity.z * velInt * delta;
-
-			// this.velocity.y -= 9.8 * 100.0 * delta; // 100.0 = mass
-
-			this.direction.z = Number( this.moveForward ) - Number( this.moveBackward );
-			this.direction.x = Number( this.moveRight ) - Number( this.moveLeft );
-			this.direction.normalize(); // this ensures consistent movements in all directions
-
-			if ( this.moveForward || this.moveBackward ) this.velocity.z -= this.direction.z * moveInt * delta;
-			if ( this.moveLeft || this.moveRight ) this.velocity.x -= this.direction.x * moveInt * delta;
-
-			this.controlsPerson.moveRight( - this.velocity.x * delta );
-			this.controlsPerson.moveForward( - this.velocity.z * delta );
-
-			const camPos = this.camera.position;
-
-			// if ( onObject === true ) {
-			// 	velocity.y = Math.max( 0, velocity.y );
-			// 	canJump = true;
-			// }
-			prevTime = time;
-		}
+		// if ( onObject === true ) {
+		// 	velocity.y = Math.max( 0, velocity.y );
+		// 	canJump = true;
+		// }
 	}
 
 	rendering = () => {
@@ -238,18 +197,10 @@ export default class CanvasComponent extends React.Component {
 	}
 
 	render () {
-		const {pageKey, lockScreen} = this.state;
+		const {pageKey} = this.state;
 		return (
 			<div className={`back-board canvas ${pageKey==='canvas'?'active':''}`}>
 				<div id='container'></div>
-				<div className={`lock-screen flex ${lockScreen?'active':''}`}>
-					<div className='btn-start flex' onClick={e=>this.startControl()}>Start</div>
-				</div>
-				{/* <div className='setting'>
-					{this.placeArr.map((item, idx)=>
-						<div className={`btn-island flex ${selPlace===idx?'active':''} `} onClick={e=>this.gotoPlace(idx)} key={idx}>Place {idx + 1}</div>
-					)}
-				</div> */}
 			</div>
 		);
 	}

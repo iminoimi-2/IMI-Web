@@ -20,7 +20,10 @@ import imgNewEnvPZ from '../assets/images/new-pz.jpg';
 import imgNewEnvNX from '../assets/images/new-nx.jpg';
 import imgNewEnvNY from '../assets/images/new-ny.jpg';
 import imgNewEnvNZ from '../assets/images/new-nz.jpg';
-import { islandSize } from '../components/Canvas';
+import { localTest } from '../components/Canvas';
+
+const raycaster = new THREE.Raycaster();
+const pointer = new THREE.Vector2();
 
 autoPlay(true);
 const imgEnv0Arr = [imgEnvPX, imgEnvNX, imgEnvPY, imgEnvNY, imgEnvPZ, imgEnvNZ];
@@ -29,56 +32,43 @@ const imgNewEnvArr = [imgNewEnvPX, imgNewEnvNX, imgNewEnvPY, imgNewEnvNY, imgNew
 
 export const modelH = 4, transTime = 1000, serverUrl = 'https://emogon.com/configurator/', apiUrl = serverUrl + 'admin/';
 
+const nearGroundDis = 1000;
+const testGeo = new THREE.BoxGeometry(1, 1, 1), testMat = new THREE.MeshStandardMaterial({color:0xFF0000});
+export const testMesh = new THREE.Mesh(testGeo, testMat);
+
 export function GetDis(pos0, pos1, dis3D = false) {
     const disX = pos0.x - pos1.x, disY = pos0.y - pos1.y, disZ = pos0.z - pos1.z;
     if (dis3D) return Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2) + Math.pow(disZ, 2));
     else return Math.sqrt(Math.pow(disX, 2) + Math.pow(disZ, 2));
 }
 
-export function GetPanoMesh (key) {
-	const panoR = 15, panoInR = panoR * 0.9, roundH = 3;
-	var geo, img, rot = {x:0, y:0, z:0}, posY = 0;
-	geo = new THREE.SphereGeometry(key==='pano_sun'?panoR+0.5:panoR, 128, 128);
-	img = imgPanoBack; rot = {x:0, y:3.1416, z:-0.03}; posY = 1.2;
-	const panoMesh = new THREE.Mesh(geo, GetMat(img));
-	panoMesh.name = key;
-	panoMesh.material.transparent = false;
-	panoMesh.rotation.set(rot.x, rot.y, rot.z); panoMesh.position.y = posY;
-	return panoMesh;
+export function GetNearGroundArr(groundArr, posIsland, nearDis) {
+	const nearGroundArr = [], posPlayer = {x:-posIsland.x, z:-posIsland.z}, disCheck = nearDis || nearGroundDis;
+	groundArr.forEach(ground => {
+		const groundDis = GetDis(ground.vPos, posPlayer);
+		if (groundDis < disCheck) {
+			nearGroundArr.push(ground);
+			ground.visible = true
+		}
+		else if (localTest) ground.visible = false;
+	});
+	return nearGroundArr;
 }
-
-function GetMat(img) {
-	return new THREE.MeshBasicMaterial({map:GetMap(img), transparent:true, side:2});
-}
+// disArr 1071-2684, size 1000 x 1000
 
 export function SetTween(obj, attr, info, easeTime, key, other) {
 	var tweenData = {}, tweenObj = obj;
 	const easeType = Easing.Cubic.InOut;
 	if 		(attr === "opacity") tweenData = {'opacity':info };
 	else if (attr === "position") tweenData = {'position.x':info.x, 'position.y':info.y, 'position.z':info.z };
+	// else if (attr === "rotation") tweenData = {'rotation.y':info.y };
+	else if (attr === "rotation") {tweenObj=obj.rotation; tweenData = {'y':info.y };}
 	else if (attr === "intensity") tweenData = {'intensity':info };
 	else if (attr === "scale") tweenData = {'scale.x':info.x, 'scale.y':info.y, 'scale.z':info.z };
 	else if (attr === "fov") tweenData = {'fov':info };
-	else if (attr === 'controlsOrbit') {
-		const {x, y, z} = obj.target;
-		tweenObj = {x, y, z}; tweenData = {...info};
-	}
-	// else if (attr === 'target') {
-	// 	const {x, y, z} = obj.target;
-	// 	tweenObj = {x, y, z}; tweenData = {...info};
-	// }
-	// else if (attr === "color") tweenData = {'r': info, 'g':info, 'b':info};
 	const tweenFun = new Tween(tweenObj).to( tweenData , easeTime ).easing(easeType).start();
 
 	tweenFun.update( res=> {
-		if (key==='camera') obj.updateProjectionMatrix();
-		else if (key==='controlsOrbit') {
-			obj.target = new THREE.Vector3(res.x, res.y, res.z);
-			obj.update();
-		} else if (key==='controlTarget') {
-			const {x, y, z} = obj.position;
-			other.target = new THREE.Vector3(x, y, z);
-		}
 	})
 }
 
@@ -110,27 +100,26 @@ export function SetColor(bodyMeshArr, selCol) {
 	});
 }
 
-export function GetClickObj(e, arr, camera, wSize, mouse, raycaster) {
+const {innerWidth, innerHeight} = window;
+
+export function GetMousePos(e) {
 	var posX, posY;
 	if (e.clientX && e.clientY) {posX = e.clientX; posY = e.clientY;}
 	else if (e.touches || e.changedTouches){
 		const touch = e.touches[0] || e.changedTouches[0];
 		posX = touch.pageX; posY = touch.pageY;
-	} else return;
-	mouse.x = ( posX / wSize.width ) * 2 - 1;
-	mouse.y = - ( posY / wSize.height ) * 2 + 1;
-	raycaster.setFromCamera( mouse, camera );
+	};
+	return {posX, posY};
+}
+
+export function GetClickObj(e, arr, camera) {
+	const {posX, posY} = GetMousePos(e);
+	pointer.x = ( posX / innerWidth ) * 2 - 1;
+	pointer.y = - ( posY / innerHeight ) * 2 + 1;
+	raycaster.setFromCamera( pointer, camera );
 	const interObj = raycaster.intersectObjects( arr )[0];
 	if (interObj) interObj.pos2D = {x:posX, y:posY};
 	return interObj;
-}
-
-function GetMap(img) {
-	const texture = new THREE.TextureLoader().load(img);
-	// texture.wrapS = texture.wrapT = THREE.RepeatWrapping;
-	// texture.offset.set( 0, 0 );
-	// texture.repeat.set( 1, 1 );
-	return texture;
 }
 
 export function HEXStrToHexInt(rrggbb) {
@@ -161,34 +150,4 @@ export function GetLangLabel(item, lan, type) {
 // const envMap = new THREE.CubeTextureLoader().load(imgEnv0Arr)
 // const envMap = new THREE.TextureLoader().load(imgEnvPano);
 
-export function CustomModel(object, idx) {
-	const placeArr = [], groundArr = [];
-	object.children.forEach(group => {
-		if (group.name==='place') {
-			group.children.forEach(place => {
-				place.visible = false;
-				const pos = place.position;
-				placeArr.push({x:pos.x, y:pos.z + 80, z:-pos.y});
-			});
-		} else if (group.name==='ground' || group.name==='hill' || group.name==='road') {
-			group.children.forEach(ground => {
-				groundArr.push(ground);
-			});
-		}
-	});
-	object.traverse(child=>{
-		if (child instanceof THREE.Mesh) {
-			if (child.material.length) {
-				console.log(child.material.length);
-			} else {
-				const {map, color} = child.material;
-				child.material = new THREE.MeshStandardMaterial({map});
-			}
-		}
-	})
-	// const vPos = new THREE.Box3(new THREE.Vector3()).setFromObject(object), {min, max} = vPos;
-	// const vSize = {x:max.x-min.x, y:max.y-min.y, z:max.z-min.z},
-	// const scl = 0.01; // islandSize/vSize.x;
-	// object.scale.set(scl, scl, scl);
-	return {islandModel:object, placeArr, groundArr};
-}
+

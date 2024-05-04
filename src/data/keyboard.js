@@ -1,25 +1,25 @@
 
 export function OnKeyDown(e, self) {
-	const {controlKey} = self;
+	if (self.state.soulMode) return;
 	switch ( e.code ) {
 		case 'ArrowUp':
 		case 'KeyW':
-			if (controlKey==='person') {self.moveForward = true;}
+			self.moveForward = true;
 			break;
 
 		case 'ArrowLeft':
 		case 'KeyA':
-			if (controlKey==='person') {self.moveLeft = true;}
+			self.moveLeft = true;
 			break;
 
 		case 'ArrowDown':
 		case 'KeyS':
-			if (controlKey==='person') {self.moveBackward = true;}
+			self.moveBackward = true;
 			break;
 
 		case 'ArrowRight':
 		case 'KeyD':
-			if (controlKey==='person') {self.moveRight = true;}
+			self.moveRight = true;
 			break;
 
 		case 'Space':
@@ -31,30 +31,27 @@ export function OnKeyDown(e, self) {
 }
 
 export function OnKeyUp(e, self) {
-	const {controlKey} = self;
-	
+	if (self.state.soulMode) return;
 	switch ( e.code ) {
 
 		case 'ArrowUp':
 		case 'KeyW':
-			if (controlKey==='person') {
 				self.moveForward = false;
-			}
 			break;
 
 		case 'ArrowLeft':
 		case 'KeyA':
-			if (controlKey==='person') {self.moveLeft = false;}
+			self.moveLeft = false;
 			break;
 
 		case 'ArrowDown':
 		case 'KeyS':
-			if (controlKey==='person') {self.moveBackward = false;}
+			self.moveBackward = false;
 			break;
 
 		case 'ArrowRight':
 		case 'KeyD':
-			if (controlKey==='person') {self.moveRight = false;}
+			self.moveRight = false;
 			break;
 		
 		case 'KeyO':
