@@ -14,7 +14,7 @@ import fbxNPC4 from '../assets/model/man/npc-4.fbx';
 
 import fbxButterfly from '../assets/model/butterfly.fbx';
 import imgSky from '../assets/images/sky-1.jpg';
-import imgSpace from '../assets/images/space.jpg';
+import imgSpace from '../assets/images/space-1.jpg';
 
 import { GetNearGroundArr } from '../data/info';
 import { npcInfo } from './constant';
@@ -109,10 +109,10 @@ export function LoadIslandModel(self) {
 	// gltfLoader.load( glbIsland, ( gltf ) => {
 	// }, ( xhr ) => { }, ( error ) => { console.log(error) } );
 
-	const loader = new FBXLoader(), posMinDis = 2000, posDelta = 2000;
+	const loader = new FBXLoader(), posMinDis = 1000, posDelta = 2000;
 	self.birdGroup.visible = false;
 	loader.load(fbxButterfly, (fbx) => {
-		fbx.scale.multiplyScalar(2);
+		fbx.scale.multiplyScalar(1);
 		for (let i = 0; i < 15; i++) {
 			const cloneBird = fbx.clone(),
 				disSoul = posMinDis + Math.random() * posDelta,
@@ -289,15 +289,18 @@ function GetMap(img) {
 	return texture;
 }
 
-const nodeGeo = new THREE.SphereGeometry(1, 16, 16),
-	nodeMat = new THREE.MeshStandardMaterial({color:0xFFFFFF, transparent:true, opacity:0.8}),
-	nodeMesh = new THREE.Mesh(nodeGeo, nodeMat),
-	partCount = 5, partAng = Math.PI * 2 / partCount,
-	nodePlayArea = 100;
+const nodeColor = 0x5A5AC2;
+const partCount = 5, partAng = Math.PI * 2 / partCount, nodePlayArea = 100;
+
+function GetNodeCol() {
+	const r = Math.round((0.35 + Math.random() * 0.1 - 0.05) * 256),
+		g = Math.round((0.35 + Math.random() * 0.1 - 0.05) * 256),
+		b = Math.round((0.75 + Math.random() * 0.1 - 0.05) * 256);
+	return new THREE.Color("rgb("+r+", "+g+", "+b+")");
+}
 
 function GetNodeMesh(nodeRoot, posParent, nodeMinDis, nodeNum, random) {
-	const nodeScl = 4, // /nodeRoot
-		nodeAltArea = nodeMinDis/3,
+	const nodeAltArea = nodeMinDis/3,
 		spaceDis = random?0:nodeMinDis,
 		nodeAng = nodeRoot===0?partAng * nodeNum + Math.random() * partAng: Math.random() * Math.PI*2,
 		nodeDis = spaceDis + Math.random () * nodeMinDis,
@@ -309,9 +312,11 @@ function GetNodeMesh(nodeRoot, posParent, nodeMinDis, nodeNum, random) {
 		centerPos[item.axis] = item.value + Math.random() * nodePlayArea * 2 - nodePlayArea;
 	});
 	// const cloneNode = nodeMesh.clone();
-	const nodeGeo = new THREE.SphereGeometry(1, 16, 16),
-		nodeMat = new THREE.MeshStandardMaterial({color:0xFFFFFF, transparent:true, opacity:0.8}),
-		cloneNode = new THREE.Mesh(nodeGeo, nodeMat)
+	const nodeScl = random? 5 + Math.random() * 5: 10 + Math.random() * 15,
+		nodeOpa = random?0.1 + Math.random() * 0.1:0.3 + Math.random() * 0.4,
+		nodeGeo = new THREE.SphereGeometry(1, 16, 16),
+		nodeMat = new THREE.MeshStandardMaterial({color:GetNodeCol(), transparent:true, opacity:nodeOpa}),
+		cloneNode = new THREE.Mesh(nodeGeo, nodeMat);
 	cloneNode.scale.multiplyScalar(nodeScl);
 	cloneNode.position.set(nodePosX, nodePosY, nodePosZ);
 	cloneNode.flyDir = new THREE.Vector3(Math.random(), Math.random(), Math.random()).normalize().multiplyScalar(2);
@@ -327,7 +332,7 @@ function GetLineMesh(linewidth, nodeArr) {
 	points.push( new THREE.Vector3( 0, 0, 0 ) );
 	points.push( new THREE.Vector3( 0, 0, 0 ) );
 	const lineGeo = new THREE.BufferGeometry().setFromPoints( points ),
-		lineMat = new THREE.LineBasicMaterial({ color: 0x888888, linewidth }),
+		lineMat = new THREE.LineBasicMaterial({ color: 0x666666, linewidth, transparent:true, opacity:0.5 }),
 		lineMesh = new THREE.Line(lineGeo, lineMat);
 	lineMesh.nodeArr = nodeArr;
 	return lineMesh;
@@ -364,15 +369,18 @@ export function LoadSoulModel(self) {
 	// 	soulGroup.add(soulMesh);
 	// }
 
-	const firstNode = nodeMesh.clone();
+	const nodeGeo = new THREE.SphereGeometry(1, 16, 16),
+		nodeMat = new THREE.MeshStandardMaterial({color:nodeColor, transparent:true, opacity:0.5}),
+		firstNode = new THREE.Mesh(nodeGeo, nodeMat);
 	firstNode.nodeNum = 0;
 	firstNode.nodeRoot = 0;
-	firstNode.scale.multiplyScalar(2);
+	firstNode.scale.multiplyScalar(20);
 	firstNode.flyDir = new THREE.Vector3(Math.random(), Math.random(), Math.random()).normalize().multiplyScalar(2);
 	firstNode.flyArea = {
 		min:{x:-nodePlayArea, y:-nodePlayArea, z:-nodePlayArea},
 		max:{x: nodePlayArea, y: nodePlayArea, z: nodePlayArea},
 	}
+	console.log(firstNode);
 	soulGroup.children[0].add(firstNode);
 	AddNodeMesh(0, 0, soulGroup, 1000);
 	for (let i = 0; i < 300; i++) {

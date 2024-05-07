@@ -1,6 +1,6 @@
 
 import * as THREE from 'three';
-import { SetColTween, SetTween } from "./info";
+import { GetDis, SetColTween, SetTween, innerHeight, innerWidth } from "./info";
 import { camDis, timeTransSoul, timeUpSoul } from '../components/Canvas';
 
 
@@ -9,26 +9,28 @@ export const sceneSkyColHex = 0x30ACEA, skyRGB = new THREE.Color(sceneSkyColHex)
 const hideSoulKeyArr = ['ground', 'hill', 'road', 'bamboo', 'cloud', 'plant', 'other', 'other1', 'place', 'stone', 'other-mountain'];
 
 export function SetSoulScene(soul, self) {
-	const {panoBack, islandGroup, birdGroup, frameArr, npcArr, player, soulGroup} = self;
-	const targetCol = soul?spaceRGB:skyRGB, targetJson = {r:targetCol.r, g:targetCol.g, b:targetCol.b};
+	const {panoBack, islandGroup, birdGroup, totalGroup, frameArr, npcArr, player, soulGroup, controlsOrbit, camera} = self;
+	const targetCol = soul?spaceRGB:skyRGB, backColJson = {r:targetCol.r, g:targetCol.g, b:targetCol.b};
 	const targetIslandPos = soul?{x:0, y:-1000, z:0}:{...self.oldIslandPos};
-	const targetCameraPos = soul?{x:0, y:camDis, z:1}:{...self.oldCameraPos};
-	soulGroup.position.y = -3000;
+	const targetCameraPos = soul?{x:0, y:3000, z:2000}:{...self.oldCameraPos};
+	const backOpaVal = soul?0:1;
+	// soulGroup.position.y = -3000;
 	// self.controlsOrbit.maxPolarAngle = soul?Math.PI:Math.PI / 2 + 0.5;
 
 	if (soul) {
 		self.oldIslandPos = {...self.islandGroup.position};
-		self.oldCameraPos = {...self.camera.position};
+		self.oldCameraPos = {...camera.position};
 	} else {
 	}
-	const playerPos = self.islandGroup.position;
+	
 	setTimeout(() => {
-		SetColTween(panoBack.material, targetJson, timeTransSoul);
+		// SetColTween(panoBack.material, backColJson, timeTransSoul);
+		SetTween(panoBack.material, 'opacity', backOpaVal, timeTransSoul);
 		SetTween(islandGroup, 'position', targetIslandPos, timeTransSoul);
 		SetTween(self.camera, 'position', targetCameraPos, timeTransSoul);
 		for (let i = 0; i <= timeTransSoul/10; i++) {
 			setTimeout(() => {
-				self.camera.lookAt(new THREE.Vector3(0, 0, 0));
+				camera.lookAt(new THREE.Vector3(0, 0, 0));
 			}, i * 10);
 		}
 	}, soul?0:timeUpSoul);
@@ -49,12 +51,18 @@ export function SetSoulScene(soul, self) {
 	}, soul?0: timeTransSoul + timeUpSoul);
 	setTimeout(() => {
 		birdGroup.visible = soul;
+		controlsOrbit.minDistance = soul?300:camDis * 0.5;
+		if (!soul) SetTween(totalGroup, 'position', {x:0, y:0, z:0}, timeUpSoul);
 	}, soul?timeTransSoul+timeUpSoul * 3:0);
 
-	self.controlsOrbit.minPolarAngle = 0;
+	controlsOrbit.minPolarAngle = 0;
+	controlsOrbit.enableZoom = soul;
+	controlsOrbit.enableRotate = !soul;
+
+	controlsOrbit.maxDistance = 5500;
 	setTimeout(() => {
-		self.controlsOrbit.minPolarAngle = soul?0:0.5;
-		self.controlsOrbit.maxPolarAngle = soul?0.2:Math.PI / 2 + 0.5;
+		controlsOrbit.minPolarAngle = soul?0:0.5;
+		controlsOrbit.maxPolarAngle = soul?0.8:Math.PI / 2 + 0.5;
 	}, timeTransSoul+timeUpSoul);
 }
 
@@ -100,5 +108,22 @@ function SetFrameArrMat(frameArr, value) {
 				}
 			});
 		}, (1-minFrameOpa) * 1000);
+	}
+}
+
+export function CameraZoom(e, self) {
+	const {camera, totalGroup} = self, {clientX, clientY, deltaY} = e;
+	const camDis = GetDis({x:0, y:0, z:0}, camera.position, true);
+	const xR = (innerWidth/2 - clientX) / innerWidth, yR = (innerHeight/2- clientY) / innerHeight;
+	const moveRate = 300;
+	if (deltaY < 0) {
+		totalGroup.position.x += xR * moveRate;
+		totalGroup.position.z += yR * moveRate;
+	} else {
+		const posIsland = totalGroup.position;
+		const moveX = posIsland.x>0?-20:20;
+		const moveZ = posIsland.z>0?-20:20;
+		totalGroup.position.x += moveX;
+		totalGroup.position.z += moveZ;
 	}
 }

@@ -11,11 +11,11 @@ import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader';
 // import fbxMan from '../assets/model/man/man-0.fbx';
 // import glbIsland from '../assets/model/scene-group-normal.glb'; // compress
 
-import { GetClickObj, GetMousePos, GetNearGroundArr, SetTween, testMesh, transTime } from '../data/info';
+import { GetClickObj, GetMousePos, GetNearGroundArr, SetTween, innerWidth, testMesh, transTime } from '../data/info';
 import { OnKeyDown, OnKeyUp } from '../data/keyboard';
 import { DrawSoulLines, FlyBirdWing, FlySoul, FlySoulNodes, PlayerMove, WalkNPC } from '../data/walk';
 import { LoadNPCModelArr, LoadIslandModel, LoadPlayer, AddNPCModel, GetPanoMesh, LoadSoulModel } from '../data/load';
-import { SetSoulScene, sceneSkyColHex, sceneSpaceColHex } from '../data/sceneTrans';
+import { CameraZoom, SetSoulScene, sceneSkyColHex, sceneSpaceColHex } from '../data/sceneTrans';
 
 export const camDis = 50, localTest = false, timeTransSoul = 3000, timeUpSoul = 1000;
 // const islandArr = [{x:0, z:0, fbx:fbxIsland0}], altArea = 10, altCheckTime = 1000;
@@ -47,6 +47,7 @@ export default class CanvasComponent extends React.Component {
 		document.addEventListener( 'keyup', e=> OnKeyUp(e, this) );
 		document.addEventListener( 'click', e=> this.onMouseClick(e) );
 		document.addEventListener( 'mousemove', e=> this.onMouseMove(e) );
+		document.addEventListener('mousewheel', e=> { CameraZoom(e, this);});
 	}
 
 	componentWillReceiveProps(nextProps) {
@@ -73,7 +74,7 @@ export default class CanvasComponent extends React.Component {
 	onMouseMove = (e) => {
 		if (!this.state.gameMode) return;
 		const {posX} = GetMousePos(e);
-		this.props.showSideRight(posX > window.innerWidth - 120);
+		this.props.showSideRight(posX > innerWidth - 120);
 	}
 
 	onMouseClick = (e) => {
@@ -108,7 +109,7 @@ export default class CanvasComponent extends React.Component {
 	loadPanoBack = () => {
 		this.panoBack = GetPanoMesh('pano-back'); this.totalGroup.add(this.panoBack);
 		// this.panoSky = GetPanoMesh('pano-sky'); this.totalGroup.add(this.panoSky);
-		// this.panoSpace = GetPanoMesh('pano-space'); this.totalGroup.add(this.panoSpace);
+		this.panoSpace = GetPanoMesh('pano-space'); this.totalGroup.add(this.panoSpace);
 		// console.log(this.panoSky);
 		// console.log(this.panoSpace);
 	}

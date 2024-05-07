@@ -30,6 +30,7 @@ const imgEnv0Arr = [imgEnvPX, imgEnvNX, imgEnvPY, imgEnvNY, imgEnvPZ, imgEnvNZ];
 const imgEnvMirror = [imgMirror, imgMirror, imgMirror, imgMirror, imgMirror, imgMirror];
 const imgNewEnvArr = [imgNewEnvPX, imgNewEnvNX, imgNewEnvPY, imgNewEnvNY, imgNewEnvPZ, imgNewEnvNZ];
 
+export const {innerWidth, innerHeight} = window;
 export const modelH = 4, transTime = 1000, serverUrl = 'https://emogon.com/configurator/', apiUrl = serverUrl + 'admin/';
 
 const nearGroundDis = 1000;
@@ -38,8 +39,8 @@ export const testMesh = new THREE.Mesh(testGeo, testMat);
 
 export function GetDis(pos0, pos1, dis3D = false) {
     const disX = pos0.x - pos1.x, disY = pos0.y - pos1.y, disZ = pos0.z - pos1.z;
-    if (dis3D) return Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2) + Math.pow(disZ, 2));
-    else return Math.sqrt(Math.pow(disX, 2) + Math.pow(disZ, 2));
+    if (!dis3D) return Math.sqrt(Math.pow(disX, 2) + Math.pow(disZ, 2));
+    else return Math.sqrt(Math.pow(disX, 2) + Math.pow(disY, 2) + Math.pow(disZ, 2));
 }
 
 export function GetNearGroundArr(groundArr, posIsland, nearDis) {
@@ -99,8 +100,6 @@ export function SetColor(bodyMeshArr, selCol) {
 		// child.material.color.setHex(selCol);
 	});
 }
-
-const {innerWidth, innerHeight} = window;
 
 export function GetMousePos(e) {
 	var posX, posY;
