@@ -1,0 +1,23 @@
+
+.canvas { position: absolute; }
+/* z-index: -1; */
+.canvas.welcome-canvas {z-index: 0; filter: blur(1px);}
+
+.canvas .setting {position: absolute; z-index: 1; left: 10px; top: 10px; padding: 10px 20px; background-color: #FFFFFFAA;}
+.canvas .setting .btn-island {margin: 10px 0px; width: 100px; height: 30px; border-radius: 4px; border: 1px solid; background-color: white; cursor: pointer;}
+.canvas .setting .btn-island.active {border-color: red; cursor: default;}
+
+.canvas .lock-screen {position: absolute; z-index: -1; left: 0; top: 0; width: 100vw; height: 100vh; background-color: #00000033;}
+.canvas .lock-screen.active {z-index: 1;}
+.canvas .btn-start { width: 200px; height: 80px; border-radius: 8px; border: 1px solid; background-color: white; font-size: 32px; font-weight: 700; cursor: pointer;}
+
+
+.main-logo.canvas-logo {position: absolute; z-index: 4; top: 10px; left: 10px; background-color: #FFFFFFDD; border-radius: 50%;}
+
+.setting {position: absolute; top: 20px; left: 20px; background-color: #FFFFFFDD;}
+.setting select {font-size: 20px;}
+.setting .set-item {padding: 5px 20px; border: 1px solid; border-radius: 5px; cursor: pointer; margin: 15px; background-color: white;}
+.setting .set-item .set-title {margin-bottom: 5px; font-size: 20px; font-weight: 700;}
+.setting .set-item .set-line {display: flex; margin: 5px 0px;}
+.setting .set-item .set-line .set-label {width: 60px;}
+.setting .set-item .set-line input {flex: 1;}

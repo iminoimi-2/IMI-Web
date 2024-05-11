@@ -20,7 +20,7 @@ import imgNewEnvPZ from '../assets/images/new-pz.jpg';
 import imgNewEnvNX from '../assets/images/new-nx.jpg';
 import imgNewEnvNY from '../assets/images/new-ny.jpg';
 import imgNewEnvNZ from '../assets/images/new-nz.jpg';
-import { localTest } from '../components/Canvas';
+import { localTest } from '../pages/world/Canvas';
 
 const raycaster = new THREE.Raycaster();
 const pointer = new THREE.Vector2();

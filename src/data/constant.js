@@ -1,4 +1,6 @@
 
+export const onePageMode = true;
+
 export const npcInfo = [
 	{key:'npc0', posNum:0, fbxNum:0 },
 	{key:'npc1', posNum:1, fbxNum:1, fixed:true },

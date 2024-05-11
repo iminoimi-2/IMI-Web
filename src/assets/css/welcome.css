@@ -1,0 +1,33 @@
+
+.page-wrapper.welcome-wrapper {background-size: cover; background-position: center;}
+
+.welcome .main-content {flex: 1; margin-top: 20px; width: 100%;}
+.welcome .main-content .intro-wrapper {display: flex; align-items: center;}
+
+.welcome .intro-wrapper .intro-left {flex: 1;}
+.welcome .intro-wrapper .intro-left * {color: white; margin-left: 20px;}
+.welcome .intro-wrapper .intro-left .big-title {font-size: 32px; margin: 20px;}
+.welcome .intro-wrapper .intro-left .button {width: 120px;}
+
+.welcome .sections {width: 100%; margin-top: 20px;}
+.welcome .card-row {width: 100%; margin: 30px 0px;}
+.welcome .card-wrapper {width: 200px; margin: auto; background-color: #2F325DAA; border-radius: 10px; padding: 20px; transition: all 0.3s;}/* cursor: pointer; */
+.welcome .card-wrapper:hover {transform: scale(1.07);}
+.welcome .card-wrapper * {color: white;}
+.welcome .card-wrapper .card-image {width: 100%; height: 250px; border-radius: 8px; background-repeat: no-repeat; background-position: center; background-size: cover;}
+.welcome .card-wrapper .card-info {margin-top: 10px;}
+.welcome .card-wrapper .card-info .card-main-info { display: flex;}
+.welcome .card-wrapper .card-info .card-main-info .user-logo { width: 20px; height: 20px; border-radius: 50%; background-color: grey;}
+.welcome .card-wrapper .card-info .card-main-info .user-name {flex: 1; margin-left: 10px; font-size: 14px;}
+.welcome .card-wrapper .card-info .card-main-info .card-time {font-size: 14px;}
+
+.welcome .card-wrapper .card-info .card-title {margin: 5px 0px;}
+
+.welcome .card-wrapper .card-info .card-sub-info * { font-size: 14px; }
+.welcome .card-wrapper .card-info .card-sub-info .card-des {flex: 1;}
+.welcome .card-wrapper .card-info .card-sub-info .card-button { height: 30px; background-color: #1164c2; border-radius: 15px; width: 100px; }
+
+
+.welcome .intro-wrapper .card-wrapper.big-card { width: 300px; background-color: #FFFFFF88; margin-right: 50px;}/* cursor: pointer; */
+.welcome .intro-wrapper .card-wrapper.big-card:hover { transform:  none;}
+.welcome .intro-wrapper .card-wrapper.big-card .card-image { height: 400px;}

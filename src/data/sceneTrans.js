@@ -1,7 +1,7 @@
 
 import * as THREE from 'three';
 import { GetDis, SetColTween, SetTween, innerHeight, innerWidth } from "./info";
-import { camDis, timeTransSoul, timeUpSoul } from '../components/Canvas';
+import { camDis, timeTransSoul, timeUpSoul } from '../pages/world/Canvas';
 
 
 export const sceneSkyColHex = 0x30ACEA, skyRGB = new THREE.Color(sceneSkyColHex),

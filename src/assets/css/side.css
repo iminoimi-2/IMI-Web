@@ -1,7 +1,0 @@
-
-.side-right {position: absolute; right: 20px; z-index: 4; top: calc(50vh - 240px);}
-.side-right .side-button {width: 100px; height: 100px; margin: 20px 0px; border-radius: 10px; background-color: white; cursor: pointer; transition: all 0.3s; transition-timing-function: ease-in-out;}
-.side-right .side-button img {width: 70%; height: auto;}
-.side-right .side-button:hover {transform: scale(1.2);} /* background-color: #DDDDDD; */
-.side-right .side-button.hide {margin-right: -200px;}
-.side-right .side-button.trans {opacity: 0.5;}
