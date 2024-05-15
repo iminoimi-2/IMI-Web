@@ -192,7 +192,7 @@ export default class WelcomeComponent extends React.Component {
 								</div>
 							</div>
 						</div>
-						<div className='sections'>
+						<div className='card-sections'>
 							{sectionSource.map((row, rIdx)=>
 								<div className='card-row flex-row' key={rIdx}>
 									{row.map((card, cIdx)=>

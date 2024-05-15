@@ -9,7 +9,7 @@
 .welcome .intro-wrapper .intro-left .big-title {font-size: 32px; margin: 20px;}
 .welcome .intro-wrapper .intro-left .button {width: 120px;}
 
-.welcome .sections {width: 100%; margin-top: 20px;}
+.cardd-sections {width: 100%; margin-top: 20px;}
 .welcome .card-row {width: 100%; margin: 30px 0px;}
 .welcome .card-wrapper {width: 200px; margin: auto; background-color: #2F325DAA; border-radius: 10px; padding: 20px; transition: all 0.3s;}/* cursor: pointer; */
 .welcome .card-wrapper:hover {transform: scale(1.07);}

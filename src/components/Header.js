@@ -10,12 +10,15 @@ import imgSearch2 from '../assets/images/search-list/icon-2.png';
 import { onePageMode } from '../data/constant';
 
 const menuSource = [
-	// {key:'home', img:imgLogoWelcome},
 	{key:'infinity', label:'InfinityLink'},
 	{key:'store', label:'IMI Store'},
 	// {key:'world', label:'IMI World', contour:true},
-],
-sideMenuSource = [
+], menuStoreSource = [
+	{key:'infinity', label:'InfinityLink'},
+	{key:'store', label:'IMI Store'},
+	{key:'community', label:'Community'},
+	{key:'world', label:'IMI World', strong:true},
+], sideMenuSource = [
 	{key:'mission', label:'Mission'},
 	{key:'community”', label:'Community”'},
 	{key:'collaboration', label:'Collaboration'},
@@ -41,7 +44,7 @@ export default class HeaderComponent extends React.Component {
 	}
 
 	onClickLogo = () => {
-		const logoPageKey = this.props.pageName==='infinity'?'home':'world'
+		const {pageName} = this.props, logoPageKey = (pageName==='infinity'||pageName==='store')?'home':'world';
 		if (onePageMode) {
 			this.props.setPageKey(logoPageKey);
 		} else {
@@ -60,9 +63,9 @@ export default class HeaderComponent extends React.Component {
 	}
 
 	onClickMenu = (menuKey) => {
-		if (menuKey === 'infinity') {
+		if (menuKey === 'infinity' || menuKey==='store' || menuKey==='world') {
 			if (onePageMode) {
-				this.props.setPageKey('infinity');
+				this.props.setPageKey(menuKey);
 			} else {
 				window.location.href = origin+'/' + menuKey;
 			}
@@ -70,7 +73,7 @@ export default class HeaderComponent extends React.Component {
 	}
 
 	render() {
-		const {strSearch, searchList} = this.state;
+		const {strSearch, searchList} = this.state, {pageName} = this.props;
 		return (
 			<div className='header flex-row'>
 				<div className='main-logo flex' onClick={e=>this.onClickLogo()}>
@@ -80,14 +83,15 @@ export default class HeaderComponent extends React.Component {
 				{/* <div className='menu-item'>
 					<div className={`menu-item`} onClick={e=>{}}>Iminoimi</div>
 				</div> */}
-				<div className='menu-wrapper flex-row'>
-					{menuSource.map((menu, idx)=>
-						<div className={`menu-item ${menu.contour?'contour':''} ${menu.img?'menu-img':'menu-label'}`} key={idx} onClick={e=>this.onClickMenu(menu.key)}>
-							{menu.img&&<img src={menu.img}></img>}
-							{!menu.img && menu.label}
-						</div>
-					)}
-				</div>
+				{pageName !== 'store' &&
+					<div className='menu-wrapper flex-row'>
+						{menuSource.map((menu, idx)=>
+							<div className={`menu-item menu-label`} key={idx} onClick={e=>this.onClickMenu(menu.key)}>
+								{menu.label}
+							</div>
+						)}
+					</div>
+				}
 				<div className='header-search'
 					onMouseOver={e=>this.showSearchList(true)}
 					onMouseOut={e=>this.showSearchList(false)}
@@ -110,6 +114,15 @@ export default class HeaderComponent extends React.Component {
 						)}
 					</div>
 				</div>
+				{pageName === 'store' &&
+					<div className='menu-wrapper flex-row'>
+						{menuStoreSource.map((menu, idx)=>
+							<div className={`menu-item menu-label ${menu.strong?'strong':''}`} key={idx} onClick={e=>this.onClickMenu(menu.key)}>
+								{menu.label}
+							</div>
+						)}
+					</div>
+				}
 				<div className='header-right flex-row'>
 					<img className='profile-icon hover-scale' src={imgAvatar}></img>
 					<div className='line-menu flex'>
