@@ -1,2 +1,2 @@
 # IMI-Web
-Iminoimi web project
+Iminoimi_UI
