@@ -1,11 +1,10 @@
-.header {display: flex; width: 100%; height: 64px;}
+.header {width: 100%; height: 90px; padding-top: 40px;}
 
 .header .main-logo {background: none; margin-left: 30px;}
-.header .menu-wrapper {flex: 1; justify-content: left;}
+.header .menu-wrapper {flex: 1; justify-content: left;  justify-content: right; margin-right: 20px;}
 .header .menu-item {margin: 0px 10px; border-radius: 10px; font-size: 16px; font-weight: 700; transition: all 0.3s;} /* cursor: pointer; */
 
 .header .menu-item.menu-label { padding: 10px 20px; color: white;}
-.header .menu-item img {width: 80px; height: 80px;}
 .header .menu-wrapper .menu-item.menu-label:hover {transform: scale(1.15); background-color: #00000033;}
 
 .header .header-search {position: relative; margin: 0px 20px; margin-right: 40px; padding: 10px 0px;}
@@ -22,7 +21,7 @@
 .header .header-search .search-list .search-item .sub-info { padding: 10px; border-radius: 4px; background-color: #00000022;}
 /* 94118B 671965 080007 */
 
-.header .header-right {margin-right: 30px; height: 100%;}
+.header .header-right {margin-right: 30px; height: 100%; display: none;}
 .header .header-right .profile-icon {width: 40px;}/* cursor: pointer; */
 
 .header .header-right .line-menu {position: relative; margin-left: 20px; width: 24px; height: 100%; padding: 5px;}
@@ -37,8 +36,12 @@
 .infinity-wrapper .header .menu-item.menu-label { color: black;}
 .infinity-wrapper .header .header-search input {color: black;}
 
+.header .menu-wrapper .menu-item.menu-label.strong {background-color: #7B6FFF; border-radius: 20px; color: #FFFFFF;}
+
 .store-wrapper .header {background-color: #141414;}
-.store-wrapper .header .menu-wrapper {justify-content: right; margin-right: 20px;}
-.store-wrapper .header .menu-wrapper .menu-item.menu-label:hover {background-color: #FFFFFF33;}
-.store-wrapper .header .menu-wrapper .menu-item.menu-label.strong {background-color: #1164c2;}
-.store-wrapper .header .header-right {display: none;}
+/* .store-wrapper .header .menu-wrapper {justify-content: right; margin-right: 20px;} */
+.header .menu-wrapper .menu-item.menu-label:hover {background-color: #FFFFFF33;}
+.store-wrapper .header .menu-wrapper .menu-item.menu-label {color: #FFFFFF88;}
+.header .menu-wrapper .menu-item.menu-label.strong:hover {background-color: #7B6FFF; color: #FFFFFFFF;}
+
+/* .store-wrapper .header .header-right {display: none;} */

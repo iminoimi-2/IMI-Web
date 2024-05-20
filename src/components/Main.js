@@ -5,6 +5,8 @@ import WorldComponent from '../pages/world/World';
 import InfinityComponent from '../pages/infinity/Infinity';
 import StoreComponent from '../pages/store/Store';
 
+const {innerWidth, innerHeight} = window;
+const port = innerWidth<innerHeight?true:false;
 
 export default class MainComponent extends React.Component {
 	constructor(props) {
@@ -22,7 +24,7 @@ export default class MainComponent extends React.Component {
 	render() {
 		const {pageKey} = this.state;
 		return (
-			<div>
+			<div className={`${port?'port':'land'}`}>
 				<WelcomeComponent
 					pageKey={pageKey}
 					setPageKey={this.setPageKey}

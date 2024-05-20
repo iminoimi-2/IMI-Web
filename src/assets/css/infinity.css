@@ -1,28 +1,29 @@
 
 .page-content.infinity {display: flex; padding: 20px; background-color: white; width: calc(100% - 40px); height: 100%; border-radius: 0px; height: calc(100vh - 100px);}
 
-.infinity .group-bar {width: 65px; padding-right: 20px; border-right: 1px solid #00000088;}
-.infinity .group-bar .group-item {margin: 10px 3px; width: 60px; height: 60px; border-radius: 20px; border: 2px solid #00000033;}
+.infinity .group-bar {width: 45px; padding-right: 20px; border-right: 1px solid #00000088;}
+.infinity .group-bar .group-item {margin: 15px 3px; width: 40px; height: 40px; border-radius: 10px; border: 2px solid #00000033;}
 .infinity .group-bar .group-item:hover {background-color: #DDDDDD;}
 .infinity .group-bar .group-item img {max-width: calc(100% - 10px); max-height: calc(100% - 10px);}
 .infinity .group-bar .group-item.add-group label {font-size: 32px; font-weight: 700;}
 .infinity .group-bar .group-item.active {border-color: #FF88FF; transform: scale(1.1); background-color: #DDDDFF;}
 
-.infinity .side-left {width: 300px; border-right: 1px solid #00000088;}
+.infinity .side-left {width: 240px; border-right: 1px solid #00000088;}
 /* .infinity .side-left * {color: white;} */
 .infinity .side-left .side-header {margin: 20px;}
-.infinity .side-left .side-header .big-title {flex: 1; text-align: center; margin-right: 30px;}
+.infinity .side-left .side-header .title {flex: 1; text-align: center; margin-right: 30px;}
 
-.infinity .side-left .side-function {border-top: 1px solid #AAAAAA; border-bottom: 1px solid #AAAAAA; padding: 10px 20px;}
-.infinity .side-left .side-function .function-item {padding: 10px 15px; display: flex; align-items: center; border-radius: 8px;}
+.infinity .side-left .side-function {border-top: 1px solid #AAAAAA; border-bottom: 1px solid #AAAAAA; padding: 10px 10px;}
+.infinity .side-left .side-function .function-item {padding: 10px 10px; display: flex; align-items: center; border-radius: 8px;}
 .infinity .side-left .side-function .function-item:hover {background-color: #DDDDDD;}
-.infinity .side-left .side-function .function-item .function-icon { width: 30px; height: 30px; margin-right: 20px;}
+.infinity .side-left .side-function .function-item .function-icon { width: 25px; height: 25px; margin-right: 20px;}
 .infinity .side-left .side-function .function-item .function-icon img { max-width: 100%; max-height: 100%; }
-.infinity .side-left .side-function .function-item .function-label { font-size: 16px; }
+.infinity .side-left .side-function .function-item .function-label { font-size: 14px; }
 
 .infinity .side-left .side-list {margin: 10px 5px; height: calc(100% - 298px);}
-.infinity .side-left .side-list .channel-item {justify-content: left; border-radius: 10px; margin: 10px 15px; padding: 5px 10px;}
+.infinity .side-left .side-list .channel-item {justify-content: left; border-radius: 10px; margin: 7px 7px; padding: 5px 10px;}
 .infinity .side-left .side-list .channel-item img {max-height: 50px; max-width: 50px; height: auto; margin-right: 5px;}
+.infinity .side-left .side-list .channel-item .channel-name {font-size: 14px;}
 .infinity .side-left .side-list .channel-item:hover {background-color: #CCCCCC;}
 .infinity .side-left .side-list .channel-item.active {background-color: #DDDDDD;}
 .infinity .side-left .side-list .channel-item.active .channel-name {color: #1e5de6; font-weight: 700;}
@@ -58,9 +59,10 @@
 
 .infinity .content .chat-header .header-right .button {margin: 0px 10px; padding: 10px 20px;}
 
-.infinity .side-right {position: relative; background-color: #DDDDDD; width: 250px; padding: 20px 0px; height:calc(100% - 40px); }
+.infinity .side-right {position: relative; background-color: #DDDDDD; width: 200px; padding: 20px 0px; height:calc(100% - 40px); }
+.infinity .side-right .side-header .sub-title {text-align: center; margin-bottom: 10px;}
 .infinity .side-right .list-wrapper {height: 100%; margin: 0px 10px;}
-.infinity .side-right .list-wrapper .ai-item {padding: 10px; display: flex; align-items: center; padding: 10px; margin: 10px; border-radius: 8px;}
+.infinity .side-right .list-wrapper .ai-item {padding: 10px 5px; display: flex; align-items: center; margin: 10px; border-radius: 8px;}
 .infinity .side-right .list-wrapper .ai-item:hover{background-color: #00000033;}
 .infinity .side-right .list-wrapper .ai-item img {margin: 0px 10px; width: 30px; height: 30px;}
 .infinity .side-right .list-wrapper .ai-item label {flex: 1;}

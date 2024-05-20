@@ -1,5 +1,5 @@
 
-body { overflow: hidden; margin: 0; padding: 0; cursor: url('../images/cursor-1.png'), pointer; } /* , url('image-path-2.svg'), url('image-path-3.jpeg') */
+body { overflow: hidden; margin: 0; padding: 0; cursor: url('../images/cursor-2.png'), pointer; } /* , url('image-path-2.svg'), url('image-path-3.jpeg') */
 .page-wrapper { position: absolute; z-index: -1; left: 0; top: 0; width: 100vw; height: 100vh; background-repeat: no-repeat; background-position: center; overflow: hidden;
 	background-image: linear-gradient(to right, #4CA8EA, #848EEC, #BF73ED, #D366BF, #E45B8E, #E45B8E, #F5505D); 
 }
@@ -10,12 +10,12 @@ body { overflow: hidden; margin: 0; padding: 0; cursor: url('../images/cursor-1.
 /* CC6BD4 F35161 */  /* 4FA6EA 79, 166, 234 */
 /* linear-gradient(127deg, rgba(0,255,0,.8), rgba(0,255,0,0) 70.71%), */
 
-.page-content {width: 1200px; height: calc(100vh - 80px) ; padding: 10px 30px; position: relative; border-radius: 50px;}
+.page-content {width: 1200px; height: calc(100vh - 90px) ; padding: 10px 30px; position: relative; border-radius: 50px;}
 /* background-color: #00000022; */
 
-.main-logo {width: 80px; height: 80px; transition: all 0.3s; display: flex; justify-content: center; align-items: center;} /* cursor: pointer; */
-.main-logo img {width: 80%; height: auto;}
-.main-logo:hover {transform: scale(1.15);}
+/* .main-logo {width: 80px; height: 80px; transition: all 0.3s; display: flex; justify-content: center; align-items: center;} /* cursor: pointer; */
+.main-logo img {width: 64px; height: 54px;}
+.main-logo:hover {transform: scale(1.15);} */
 
 .hover-scale {transition: all 0.3s;} /* cursor: pointer; */
 .hover-scale:hover {transform: scale(1.1);}
@@ -48,3 +48,5 @@ body { overflow: hidden; margin: 0; padding: 0; cursor: url('../images/cursor-1.
 .scroll-hide::-webkit-scrollbar {overflow-y: auto; display: none; }
  /* Hide scrollbar for IE, Edge and Firefox */
 .scroll-hide {overflow-y: auto; -ms-overflow-style: none;  scrollbar-width: none;  } /* IE and Edge Firefox */
+
+.port .page-content {width: calc(100% - 20px);}

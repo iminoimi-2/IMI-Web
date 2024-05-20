@@ -46,6 +46,53 @@ const sectionSource = [
 	],
 ]
 
+
+const introProblems = [
+	[
+		{title:'Fundamental Intelligence Paradox', des:['General AI: Know everything, but expert at nothing', 'Narrow AI:expert at one task, weak for the rest']},
+		{title:'Too Expensive', des:['ChatGPT-3: $5M', 'ChatGPT-4: $100M+', 'Gemini Ultra: $191M']},
+	], [
+		{title:'Underutilization of Narrow AI models', des:['Overhype on General AI', 'Narrow AI: Cheap, Fast, Master of its Trade. Do things that general AI cannot imagine']},
+		{}
+	]
+]
+
+const whatDoList = [
+	[
+		{title:'A Place for all the AI', des:['Having a wide variety of General & Narrow AIs is the first step to breaking the fundamental paradox of Generalization and specialization.']},
+		{title:'AI Linking', des:['Linking various General and Narrow AIs together to make them work as entities.', 'Infinity Link is 1000+ times less costly than Large Language Models’ Training and exponentially outperforms any AI.']}
+	], [
+		{title:'World of AI', des:['Iminoimi’s UI is a 3D game world where the user can control his character to interact and live with the AIs.', 'They are your friends, helping you to live a passionate life.']},
+		{}
+	]
+]
+
+const footerArr = [
+	[
+		{key:'api', label:'API'},
+		{key:'reserach', label: 'Research'},
+		{key:'company', label: 'Company'},
+		{key:'customer', label: 'Customers'},
+		{key:'news', label:'News'},
+		{key:'careers', label: 'Careers'}
+	], [
+		{key:'inquiry', label: 'Press Inquiries'},
+		{key:'support', label: 'Support'},
+		{key:'status', label: 'Status'},
+		{key:'twitter', label: 'Twitter'},
+		{key:'linkedin', label: 'LinkedIn'},
+		{key:'availablity', label:'Availability'}
+	], [
+		{key:'termsCustomer', label: 'Terms of Service - Customer'},
+		{key:'termsCommercial', label: 'Terms of Service - Commercial'},
+		{key:'privacy', label: 'Privacy Policy'},
+		{key:'usage', label: 'Usage Policy'},
+		{key:'disclosure', label: 'Responsible Disclosure Policy'},
+		{key:'compliance', label:'Compliance'},
+		{key:'choice', label: 'Privacy Choices'}
+	]
+]
+
 const {origin} = window.location;
 const camDis = 10;
 const birdWingRotMax = Math.PI * 5/12, birdWingRotMin = Math.PI/-12, birdWingRotUnit = 0.03, disBird = 20, birdFlyAlt = 2;
@@ -155,7 +202,7 @@ export default class WelcomeComponent extends React.Component {
 	render() {
 		const {pageKey} = this.state;
 		return (
-			<div className={`page-wrapper welcome-wrapper flex ${pageKey==='home'?'active':''}`} style={{backgroundImage:`url(${imgBackWelcome})`}}>
+			<div className={`page-wrapper welcome-wrapper flex ${pageKey==='home'?'active':''}`}>
 				{/* <div onClick={e=>this.testRouter()}>World</div> */}
 				{/* <Link to="/world">World</Link> */}
 				<div className='canvas welcome-canvas'>
@@ -167,49 +214,71 @@ export default class WelcomeComponent extends React.Component {
 				
 				<div className='page-content welcome flex'>
 					<div className='main-content scroll-hide'>
-						<div className='intro-wrapper'>
-							<div className='intro-left'>
-								<div className='sub-title'>IMI Store</div>
-								<div className='big-title'>Discover all the AI over the World</div>
-								<div className='label'>This is description</div>
-								<div className='button trans'>Button</div>
-							</div>
-							<div className='intro-right'>
-								<div className='card-wrapper big-card'>
-									<div className='card-image' style={{backgroundImage:`url(${imgCard0})`}}></div>
-									<div className='card-info'>
-										<div className='card-main-info flex-row'>
-											<div className='user-logo'></div>
-											<div className='user-name'>User Name</div>
-											<div className='card-time'>2024-03-28</div>
+						<div className='intro-part'>
+							<div className='part-title'>MAJOR PROBLEMS IN AI FIELD</div>
+							<div className='part-content'>
+								{/* <div className='big-title'>We believe AI will have a vast impact on the world. Anthropic is dedicated to building systems that people can rely on and generating research about the opportunities and risks of AI.</div> */}
+								<div className='intro-problems'>
+									{introProblems.map((row, rIdx) =>
+										<div className='intro-row' key={rIdx}>
+											{row.map((item, idx) =>
+												<div className='intro-item' key={idx}>
+													<div className='intro-title'>{item.title}</div>
+													<div className='intro-description'>
+														{item.des && item.des.map((desItem, dIdx)=>
+															<div className='des-item' key={dIdx}>
+																<div className='des-mark'></div>
+																<div className='des-content'>{desItem}</div>
+															</div>
+														)}
+													</div>
+												</div>
+											)}
 										</div>
-										<div className='card-title sub-title'>Main Card</div>
-										<div className='card-sub-info flex-row'>
-											<div className='card-des'>description</div>
-											<div className='card-button flex'>Detail View</div>
-										</div>
-									</div>
+									)}
 								</div>
 							</div>
 						</div>
-						<div className='card-sections'>
-							{sectionSource.map((row, rIdx)=>
-								<div className='card-row flex-row' key={rIdx}>
-									{row.map((card, cIdx)=>
-										<div className='card-wrapper' key={cIdx}>
-											<div className='card-image' style={{backgroundImage:`url(${card.img})`}}></div>
-											<div className='card-info'>
-												<div className='card-main-info flex-row'>
-													<div className='user-logo'></div>
-													<div className='user-name'>User Name</div>
-													<div className='card-time'>2024-03-28</div>
+
+						<div className='intro-part what-wedo'>
+							<div className='part-title'>What we do</div>
+							<div className='part-content'>
+								<div className='intro-problems'>
+									{whatDoList.map((row, rIdx) =>
+										<div className='intro-row' key={rIdx}>
+											{row.map((item, idx) =>
+												<div className='intro-item' key={idx}>
+													<div className='intro-title'>{item.title}</div>
+													<div className='intro-description'>
+														{item.des && item.des.map((desItem, dIdx)=>
+															<div className='des-item' key={dIdx}>
+																<div className='des-mark'></div>
+																<div className='des-content'>{desItem}</div>
+															</div>
+														)}
+													</div>
 												</div>
-												<div className='card-title sub-title'>{card.title}</div>
-												<div className='card-sub-info flex-row'>
-													<div className='card-des'>{card.des}</div>
-													<div className='card-button flex'>Detail View</div>
-												</div>
-											</div>
+											)}
+										</div>
+									)}
+								</div>
+							</div>
+						</div>
+
+						<div className='intro-part flex'>
+							<div className='join-button hover-scale'>Welcome joining us</div>
+						</div>
+
+						
+						
+
+						<div className='welcome-footer'>
+							{footerArr.map((column, cIdx) =>
+								<div className='footer-column' key={cIdx}>
+									{column.map((item, idx) =>
+										<div className='footer-item' key={idx}>
+											<div className='footer-label hover-scale'>{item.label}</div>
+											<div className='space'></div>
 										</div>
 									)}
 								</div>

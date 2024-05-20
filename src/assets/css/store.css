@@ -21,8 +21,9 @@
 
 .store .market-wrapper .big-title { font-size: 48px; margin: 20px 0px;}
 .store .market-wrapper .title { opacity: 0.6; margin: 10px 0px;}
-.store .market-wrapper .market-modal {flex: 1;}
-.store .market-wrapper .market-modal .pink-wrapper {width: 500px; height: 500px; background-image: url('../images/store/pink-back.png'); background-size: 'cover';}
+.store .market-wrapper .market-modal {flex: 1; position: relative;}
+.store .market-wrapper .market-modal .pink-wrapper {width: 500px; height: 500px; background-size: 'cover';}
+/* background-image: url('../images/store/pink-back.png'); */
 .store .market-wrapper .market-modal .market-frame {background-color: #DDAAFF11; width: 350px; height: 200px; border-radius: 15px; border: 3px solid #FFFFFF55; margin-left: 200px; margin-top: 100px;}
 .store .market-wrapper .market-modal .market-frame .switch-wrapper {height: 30px; width: 60px; margin-top: 20px; background-color: #00000044; border-radius: 15px; border: 2px solid #FFFFFF88; margin-right: 240px; transition: all 0.5s;}
 .store .market-wrapper .market-modal .market-frame .switch-wrapper .switch-inner {width: 28px; height: 28px; border-radius: 50%; background-color: #FFFFFF88;margin-top: 1px; margin-left: 1px; transition: all 0.5s;}
@@ -31,10 +32,61 @@
 .store .market-wrapper .market-modal .market-frame .switch-wrapper.active .switch-inner {margin-left: 32px; background-color: #FFFFFFFF;}
 
 .store .market-wrapper .market-modal .market-frame .market-value {flex: 1; width: 100%;}
-.store .market-wrapper .market-modal .market-frame .market-value div {flex: 1; text-align: center;}
+.store .market-wrapper .market-modal .market-frame .market-value div {flex: 1; text-align: center; letter-spacing: 2px; font-size: 24px;}
+
+.store .market-wrapper .market-modal img {position: absolute; z-index: -1;}
+.store .market-wrapper .market-modal .pink-drop {width: 50px; height: 50px;}
+/* #imgPinkBack { left: 0; top: 0;} */
+
+.card-sections {width: 100%; margin-top: 20px;}
+.card-sections .card-row {width: 100%; margin: 30px 0px;}
+.card-sections .card-wrapper {width: 200px; margin: auto; background-color: #2F325DAA; border-radius: 10px; padding: 20px; transition: all 0.3s;}/* cursor: pointer; */
+.card-sections .card-wrapper:hover {transform: scale(1.07);}
+.card-sections .card-wrapper * {color: white;}
+.card-sections .card-wrapper .card-image {width: 100%; height: 250px; border-radius: 8px; background-repeat: no-repeat; background-position: center; background-size: cover; opacity: 0.7; transition: all 0.5s;}
+.card-sections .card-wrapper:hover .card-image {opacity: 1;}
+.card-sections .card-wrapper .card-info {margin-top: 10px;}
+.card-sections .card-wrapper .card-info .card-main-info { display: flex;}
+.card-sections .card-wrapper .card-info .card-main-info .user-logo { width: 20px; height: 20px; border-radius: 50%; background-color: grey;}
+.card-sections .card-wrapper .card-info .card-main-info .user-name {flex: 1; margin-left: 10px; font-size: 14px;}
+.card-sections .card-wrapper .card-info .card-main-info .card-time {font-size: 14px;}
+
+.card-sections .card-wrapper .card-info .card-title {margin: 5px 0px;}
+
+.card-sections .card-wrapper .card-info .card-sub-info * { font-size: 14px; }
+.card-sections .card-wrapper .card-info .card-sub-info .card-des {flex: 1;}
+.card-sections .card-wrapper .card-info .card-sub-info .card-button { height: 30px; background-color: #1164c2; border-radius: 15px; width: 100px; }
+
+.card-sections .card-wrapper .info-row {margin: 5px 0px;}
+.card-sections .card-wrapper .info-row * {font-size: 12px;}
+.card-sections .card-wrapper .info-row .pink {color: #8540df;}
+.card-sections .card-wrapper .info-row .white {color: #FFFFFFAA;}
+
+.intro-wrapper .card-wrapper.big-card { width: 300px; background-color: #FFFFFF88; margin-right: 30px;}/* cursor: pointer; */
+.intro-wrapper .card-wrapper.big-card:hover { transform:  none;}
+.intro-wrapper .card-wrapper.big-card .card-image { height: 400px; opacity: 1;}
+
+.card-sections .card-footer {padding-top: 10px; border-top: 1px solid #FFFFFF; opacity: 0.7;}
+.card-sections .card-footer img {width: 15px; height: 15px; margin-right: 10px;}
+.card-sections .card-footer .label-time {flex: 1;}
+.card-sections .card-footer * {font-size: 12px;}
+
+.store .card-sections .card-wrapper {background-color: #000000;}
 
 .store .explore-wrapper {margin: 20px 0px;}
 .store .explore-wrapper .depart-wrapper {display: flex; margin-top: 20px;}
 .store .explore-wrapper .depart-wrapper .depart-item {margin: 0px 20px; padding: 0px 20px; height: 40px; border-radius: 20px; background-color: #222222; transition: all 0.3s;}
 .store .explore-wrapper .depart-wrapper .depart-item:first-child{margin-left: 0;}
 .store .explore-wrapper .depart-wrapper .depart-item.active {background-color: #544BAE;}
+
+.load-more {margin-top: 60px; margin-bottom: 40px;}
+.btn-load-more {height: 40px; width: 150px; border-radius: 20px; background-color: #FFFFFF22; border: 2px solid #FFFFFF66;}
+
+.store-footer { width: 100%; border-top: 2px solid #FFFFFF44; background-color: black; display: none;}
+.store-footer .main-wrapper {margin-top: 30px; margin-bottom: 40x;}
+.store-footer .main-wrapper .footer-column {flex: 1;}
+.store-footer .main-wrapper .footer-column.logo-column .footer-logo {width: 50px; height: auto; margin: 0px 20px;}
+.store-footer .main-wrapper .footer-column.logo-column label {flex:1;}
+.store-footer .main-wrapper .footer-column.label-column .label-row {margin: 15px 0px; font-size: 14px; color: #FFFFFF88;}
+.store-footer .main-wrapper .footer-column.label-column .label-row img {width: 25px; height: 25px; margin-right: 15px;}
+.store-footer .copy-right {color: #FFFFFF66; font-size: 14px; margin-top: 20px;}

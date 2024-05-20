@@ -1,33 +1,49 @@
 
-.page-wrapper.welcome-wrapper {background-size: cover; background-position: center;}
+.page-wrapper.welcome-wrapper {background-color: #141414; background-size: cover; background-position: center; background-image: none;}
 
 .welcome .main-content {flex: 1; margin-top: 20px; width: 100%;}
-.welcome .main-content .intro-wrapper {display: flex; align-items: center;}
+.welcome .main-content * {color: white;}
 
-.welcome .intro-wrapper .intro-left {flex: 1;}
-.welcome .intro-wrapper .intro-left * {color: white; margin-left: 20px;}
-.welcome .intro-wrapper .intro-left .big-title {font-size: 32px; margin: 20px;}
-.welcome .intro-wrapper .intro-left .button {width: 120px;}
+.welcome .intro-part {margin: 20px 0px; display: flex;}
+.welcome .intro-part .part-title {flex: 1; font-size: 38px; font-weight: 700; margin-right: 30px;}
+.welcome .intro-part.what-wedo .part-title {margin-top: 20px;}
+.welcome .intro-part .part-content {flex: 3;}
+.welcome .intro-part .part-content .big-title {font-size: 38px; font-weight: 500; margin-bottom: 50px;}
+.welcome .intro-part .part-content .intro-problems .intro-row {display: flex; margin: 30px 0px;}
+.welcome .intro-part .part-content .intro-problems .intro-row .intro-item {flex: 1;}
+.welcome .intro-part .part-content .intro-problems .intro-row .intro-item:first-child {margin-right: 20px;}
+.welcome .intro-part .part-content .intro-problems .intro-row .intro-item:last-child {margin-left: 20px;}
 
-.cardd-sections {width: 100%; margin-top: 20px;}
-.welcome .card-row {width: 100%; margin: 30px 0px;}
-.welcome .card-wrapper {width: 200px; margin: auto; background-color: #2F325DAA; border-radius: 10px; padding: 20px; transition: all 0.3s;}/* cursor: pointer; */
-.welcome .card-wrapper:hover {transform: scale(1.07);}
-.welcome .card-wrapper * {color: white;}
-.welcome .card-wrapper .card-image {width: 100%; height: 250px; border-radius: 8px; background-repeat: no-repeat; background-position: center; background-size: cover;}
-.welcome .card-wrapper .card-info {margin-top: 10px;}
-.welcome .card-wrapper .card-info .card-main-info { display: flex;}
-.welcome .card-wrapper .card-info .card-main-info .user-logo { width: 20px; height: 20px; border-radius: 50%; background-color: grey;}
-.welcome .card-wrapper .card-info .card-main-info .user-name {flex: 1; margin-left: 10px; font-size: 14px;}
-.welcome .card-wrapper .card-info .card-main-info .card-time {font-size: 14px;}
+.welcome .intro-part .part-content .intro-problems .intro-row .intro-item .intro-title {font-size: 28px; margin-bottom: 20px;}
+.welcome .intro-part .part-content .intro-problems .intro-row .intro-item .intro-description {}
+.welcome .intro-part .part-content .intro-problems .intro-row .intro-item .intro-description .des-item {display: flex; margin: 10px 0px;}
+.welcome .intro-part .part-content .intro-problems .intro-row .intro-item .intro-description .des-mark {margin: 5px; width: 6px; height: 6px; border-radius: 50%; background-color: #FFFFFF88;}
+.welcome .intro-part .part-content .intro-problems .intro-row .intro-item .intro-description .des-content {font-size: 18px; color: #FFFFFF88; line-height: 24px;}
 
-.welcome .card-wrapper .card-info .card-title {margin: 5px 0px;}
+.welcome .intro-part .join-button {margin: 30px 0px; padding: 20px 30px; border-radius: 12px; border: 2px solid white; font-size: 24px; font-weight: 700; text-align: center;}
 
-.welcome .card-wrapper .card-info .card-sub-info * { font-size: 14px; }
-.welcome .card-wrapper .card-info .card-sub-info .card-des {flex: 1;}
-.welcome .card-wrapper .card-info .card-sub-info .card-button { height: 30px; background-color: #1164c2; border-radius: 15px; width: 100px; }
+.welcome-footer {margin: 20px 0px; margin-top: 50px; display: flex;}
+.welcome-footer .footer-column {flex: 1; padding: 0px;}
+.welcome-footer .footer-column .footer-item {width: 100%; margin: 15px 0px; display: flex;}
+.welcome-footer .footer-column .footer-item .footer-label {padding: 0px 20px; font-size: 20px; font-weight: 500; color: #FFFFFFAA;}
+.welcome-footer .footer-column .footer-item .footer-label:hover {color: #FFFFFFFF;}
+.welcome-footer .footer-column .footer-item .space {flex: 1;}
 
 
-.welcome .intro-wrapper .card-wrapper.big-card { width: 300px; background-color: #FFFFFF88; margin-right: 50px;}/* cursor: pointer; */
-.welcome .intro-wrapper .card-wrapper.big-card:hover { transform:  none;}
-.welcome .intro-wrapper .card-wrapper.big-card .card-image { height: 400px;}
+.port .header .main-logo {margin-left: 0px;}
+.port .menu-wrapper {display: none;}
+.port .header .header-search {margin-right: 20px;}
+.port .header-search input {width: 80px;}
+
+.port .header .header-right {margin-right: 10px;}
+
+.port .welcome .intro-part {display: block;}
+.port .welcome .intro-part {margin-top: 40px;}
+.port .welcome .intro-part .part-title {font-size: 24px;}
+.port .welcome .intro-part .part-content .big-title {font-size: 20px; margin-top: 10px;}
+.port .welcome .intro-part .part-content .intro-problems .intro-row {display: block;}
+.port .welcome .intro-part .part-content .intro-problems .intro-row .intro-item:first-child {margin-right: 0;}
+.port .welcome .intro-part .part-content .intro-problems .intro-row .intro-item:last-child {margin-left: 0;}
+
+.port .welcome .intro-part .part-content .intro-problems .intro-row .intro-item .intro-title {font-size: 18px;}
+.port .welcome-footer {display: block;}

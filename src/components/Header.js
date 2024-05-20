@@ -83,7 +83,7 @@ export default class HeaderComponent extends React.Component {
 				{/* <div className='menu-item'>
 					<div className={`menu-item`} onClick={e=>{}}>Iminoimi</div>
 				</div> */}
-				{pageName !== 'store' &&
+				{/* {pageName !== 'store' &&
 					<div className='menu-wrapper flex-row'>
 						{menuSource.map((menu, idx)=>
 							<div className={`menu-item menu-label`} key={idx} onClick={e=>this.onClickMenu(menu.key)}>
@@ -91,7 +91,7 @@ export default class HeaderComponent extends React.Component {
 							</div>
 						)}
 					</div>
-				}
+				} */}
 				<div className='header-search'
 					onMouseOver={e=>this.showSearchList(true)}
 					onMouseOut={e=>this.showSearchList(false)}
@@ -114,7 +114,7 @@ export default class HeaderComponent extends React.Component {
 						)}
 					</div>
 				</div>
-				{pageName === 'store' &&
+				{//pageName === 'store' &&
 					<div className='menu-wrapper flex-row'>
 						{menuStoreSource.map((menu, idx)=>
 							<div className={`menu-item menu-label ${menu.strong?'strong':''}`} key={idx} onClick={e=>this.onClickMenu(menu.key)}>
